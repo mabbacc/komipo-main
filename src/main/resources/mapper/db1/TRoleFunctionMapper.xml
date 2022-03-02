@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.atg.apds.komipo_main.fend.mapper.db1.TRoleFunctionMapper">
+
+    <!--  Upsert T_Role  -->
+    <insert id="upsertRoleFunction">
+        <foreach collection='roleFunctionIdList' item='item' index='index'>
+            MERGE INTO t_role_function
+            USING (SELECT 1 AS DUM) AS A
+                ON (
+                    t_roleid = #{item.t_roleid} AND
+                    t_functionid = #{item.t_functionid}
+                )
+            WHEN MATCHED THEN
+                UPDATE SET
+                    <if test="item.t_roleid != null">t_roleid = #{item.t_roleid},</if>
+                    <if test="item.t_functionid != null">t_functionid = #{item.t_functionid},</if>
+                    <if test="item.upd_uid != null">upd_uid = #{item.upd_uid},</if>
+                    upd_dtm = GETDATE()
+            WHEN NOT MATCHED THEN
+                INSERT(
+                    t_roleid,
+                    t_functionid,
+                    crt_uid
+                )
+                VALUES(
+                    #{item.t_roleid},
+                    #{item.t_functionid},
+                    #{item.crt_uid}
+                );
+        </foreach>
+    </insert>
+
+
+    <!-- Delete T_Role -->
+    <delete id = "deleteRole">
+        DELETE
+        FROM t_role
+        WHERE authority = #{authority}
+    </delete>
+
+
+    <!--  Delete Role Function for update  -->
+    <delete id="deleteRoleFunctionForUpdate">
+        DELETE
+        FROM t_role_function
+        WHERE t_functionid
+            IN
+        <foreach collection="tFunctionList" item="item" index="index" open="(" close=")" separator=",">
+            #{item.id}
+        </foreach>
+            AND t_roleid = #{tRoleId}
+    </delete>
+
+
+</mapper>

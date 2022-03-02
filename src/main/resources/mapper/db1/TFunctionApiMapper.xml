@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.atg.apds.komipo_main.fend.mapper.db1.TFunctionApiMapper">
+
+    <!--  Upsert T_Role  -->
+    <insert id="upsertFunctionApi">
+        <foreach collection='functionApiList' item='item' index='index'>
+            MERGE INTO t_function_api
+            USING (SELECT 1 AS DUM) AS A
+                ON (
+                    uri = #{item.uri} AND
+                    method = UPPER(#{item.method}) AND
+                    t_functionid = #{item.t_functionid}
+                )
+            WHEN MATCHED THEN
+                UPDATE SET
+                <if test="item.t_functionid != null">t_functionid = #{item.t_functionid},</if>
+                <if test="item.uri != null">uri = #{item.uri},</if>
+                <if test="item.method != null">method = UPPER(#{item.method}),</if>
+                <if test="item.description != null">description = #{item.description},</if>
+                <if test="item.upd_uid != null">upd_uid = #{item.upd_uid},</if>
+                upd_dtm = GETDATE()
+            WHEN NOT MATCHED THEN
+                INSERT(
+                    t_functionid,
+                    uri,
+                    method,
+                    description,
+                    crt_uid
+                )
+                VALUES(
+                    #{item.t_functionid},
+                    #{item.uri},
+                    UPPER(#{item.method}),
+                    #{item.description},
+                    #{item.crt_uid}
+                );
+        </foreach>
+    </insert>
+
+    <!--  Select API by PKs  -->
+    <select id="selectApiByAuthority" resultType="kr.co.atg.apds.komipo_main.entity.tobject.T_Function_Api">
+        SELECT *
+        FROM t_function_api
+        WHERE id
+            IN
+            <foreach collection="apiKeyList" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+    </select>
+
+    <!--  Select All t_function_api table  -->
+    <select id="selectAllFunctionApis" resultType="kr.co.atg.apds.komipo_main.entity.tobject.T_Function_Api">
+        SELECT *
+        FROM t_function_api
+    </select>
+
+    <!--  Delete Role Function for update  -->
+    <delete id="deleteFunctionApi">
+        DELETE
+        FROM t_function_api
+        <foreach collection="tFunctionApiList" item="item" index="index" open="WHERE" separator="OR">
+            (
+                t_functionid = #{item.t_functionid} AND uri = #{item.uri} AND UPPER(method) = UPPER(#{item.method})
+            )
+        </foreach>
+    </delete>
+
+
+</mapper>

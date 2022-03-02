@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.atg.apds.komipo_main.fend.mapper.db1.TFunctionMapper">
+    <!--  Upsert t_function  -->
+    <insert id="upsertFunction">
+        <foreach collection='functionList' item='item' index='index'>
+            MERGE INTO t_function
+            USING (SELECT 1 AS DUM) AS A
+                ON id = #{item.id}
+            WHEN MATCHED THEN
+                UPDATE SET
+                    <if test="item.name != null">name = #{item.name},</if>
+                    <if test="item.description != null">description = #{item.description},</if>
+                    <if test="item.upd_uid != null">upd_uid = #{item.upd_uid},</if>
+                    upd_dtm = GETDATE()
+            WHEN NOT MATCHED THEN
+                INSERT(
+                    name,
+                    description,
+                    crt_uid
+                )
+                VALUES(
+                    #{item.name},
+                    #{item.description},
+                    #{item.crt_uid}
+                );
+        </foreach>
+    </insert>
+
+
+    <!-- Delete t_function -->
+    <delete id = "deleteFunction">
+        DELETE
+        FROM t_function
+        WHERE id = #{id}
+    </delete>
+</mapper>

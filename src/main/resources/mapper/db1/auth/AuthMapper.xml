@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2019.
+  ~ All right reserved.
+  ~
+  ~ This software is the confidential and proprietary information of WIXNET.
+  ~ You shall not disclose such Confidential Information and
+  ~ shall use it only in accordance with the terms of the license agreement
+  ~ you entered into with WIXNET
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.atg.apds.komipo_main.security.mapper.AuthMapper">
+
+    <!-- RESULT MAP 정의 -->
+<!--    <resultMap id="UserMap" type="kr.co.atg.apds.komipo_main.security.model.T_user">-->
+<!--        <id property="idx" column="idx" jdbcType="INTEGER"/>-->
+
+<!--        <result property="t_storeidx" column="t_storeidx" jdbcType="INTEGER"/>-->
+
+<!--        <association property="store" column="t_storeidx" select="selectStoreForUser"/>-->
+<!--    </resultMap>-->
+<!--    <select id="selectStoreForUser" resultType="kr.co.atg.apds.komipo_main.entity.T_store">-->
+<!--        select * from t_store where idx = ${t_storeidx}-->
+<!--    </select>-->
+    <!--    <resultMap id="base_t_user" type="kr.co.atg.apds.komipo_main.security.model.T_user">-->
+    <!--        <result column="jb_user_info" jdbcType="OTHER" property="jb_user_info" typeHandler="kr.co.atg.apds.komipo_main.common.util.JsonTypeHandler"/>-->
+    <!--    </resultMap>-->
+
+    <!-- ********************************************************************************************************  -->
+    <!-- Admin -->
+    <!-- (A011) 관리자 정보 가져오기(id 값 기준) -->
+    <select id="selectAdminById" resultType="kr.co.atg.apds.komipo_main.security.model.T_admin">
+        select
+            *
+        from t_admin
+        where idx = #{id}
+    </select>
+
+    <!-- (A012) 관리자 정보 가져오기(admin_id 값 기준) -->
+    <select id="selectAdminByAdminId" resultType="kr.co.atg.apds.komipo_main.security.model.T_admin">
+        select
+            *
+        from t_admin
+        where admin_id = #{admin_id}
+    </select>
+
+    <!-- (A021) 사용자 정보 가져오기(id 값 기준) -->
+    <select id="selectUserById" resultType="kr.co.atg.apds.komipo_main.security.model.T_user">
+        select
+            *
+        from t_user
+        where id = #{id}
+    </select>
+
+    <!-- (A022) 사용자 정보 가져오기(user_id 값 기준) -->
+    <select id="selectUserByUserId" resultType="kr.co.atg.apds.komipo_main.security.model.T_user">
+        select
+            *
+        from t_user
+        where user_id = #{user_id}
+    </select>
+
+
+</mapper>

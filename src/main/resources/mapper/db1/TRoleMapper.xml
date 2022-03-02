@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.atg.apds.komipo_main.fend.mapper.db1.TRoleMapper">
+
+    <!--  Upsert T_Role  -->
+    <insert id="upsertRole">
+        <foreach collection='roleList' item='item' index='index'>
+            MERGE INTO t_role
+            USING (SELECT 1 AS DUM) AS A
+                ON id = #{item.id}
+            WHEN MATCHED THEN
+                UPDATE SET
+                    <if test="item.authority != null">authority = #{item.authority},</if>
+                    <if test="item.description != null">description = #{item.description},</if>
+                    <if test="item.upd_uid != null">upd_uid = #{item.upd_uid},</if>
+                    upd_dtm = GETDATE()
+            WHEN NOT MATCHED THEN
+            INSERT(
+                    authority,
+                    description,
+                    crt_uid
+            )
+                    VALUES(
+                    #{item.authority},
+                    #{item.description},
+                    #{item.crt_uid}
+            );
+        </foreach>
+    </insert>
+
+
+    <!-- Delete T_Role -->
+    <delete id = "deleteRole">
+        DELETE
+        FROM t_role
+        WHERE id = #{id}
+    </delete>
+
+
+</mapper>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.atg.apds.komipo_main.fend.mapper.db1.BManagementInformationMapper">
+    <!--  -->
+    <resultMap id="selectAllAuthObject" type="kr.co.atg.apds.komipo_main.entity.authobject.ApdsAllAuthObject">
+        <collection property="allUserList"
+                    column="id"
+                    ofType="kr.co.atg.apds.komipo_main.entity.tobject.T_User"
+                    select="selectUser"/>
+        <collection property="allRoleList"
+                    column="id"
+                    ofType="kr.co.atg.apds.komipo_main.entity.tobject.T_Role"
+                    select="selectRole"/>
+        <collection property="allRoleFunctionList"
+                    column="id"
+                    ofType="kr.co.atg.apds.komipo_main.entity.tobject.T_Role_Function"
+                    select="selectRoleFunction"/>
+        <collection property="allFunctionList"
+                    column="id"
+                    ofType="kr.co.atg.apds.komipo_main.entity.tobject.T_Function"
+                    select="selectFunction"/>
+        <collection property="allApiList"
+                    column="id"
+                    ofType="kr.co.atg.apds.komipo_main.entity.tobject.T_Function_Api"
+                    select="selectApi"/>
+    </resultMap>
+
+
+
+    <!--  Select All Authority Data  -->
+    <select id="selectAllAuthObjects" resultMap="selectAllAuthObject">
+<!-- 
+        SELECT top 1 *
+        FROM t_user
+     -->
+        SELECT *
+        FROM T_USER LIMIT 1
+    </select>
+
+
+    <!--  Nested Query  -->
+    <select id="selectUser" resultType="kr.co.atg.apds.komipo_main.entity.tobject.T_User">
+        SELECT *
+        FROM t_user
+    </select>
+    <select id="selectRole" resultType="kr.co.atg.apds.komipo_main.entity.tobject.T_Role">
+        SELECT *
+        FROM t_role
+    </select>
+    <select id="selectRoleFunction" resultType="kr.co.atg.apds.komipo_main.entity.tobject.T_Role_Function">
+        SELECT *
+        FROM t_role_function
+    </select>
+    <select id="selectFunction" resultType="kr.co.atg.apds.komipo_main.entity.tobject.T_Function">
+        SELECT *
+        FROM t_function
+    </select>
+    <select id="selectApi" resultType="kr.co.atg.apds.komipo_main.entity.tobject.T_Function_Api">
+        SELECT *
+        FROM t_function_api
+    </select>
+</mapper>

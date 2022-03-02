@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.atg.apds.komipo_main.fend.mapper.db2.MainDashboardMapper">
+
+  <resultMap id="facilityBase" type="kr.co.atg.apds.komipo_main.entity.tobject.T_Facility">
+    <collection property="child" 
+                column="{fid=facility_id}" 
+                ofType="kr.co.atg.apds.main.entity.tobject.T_Equipment" 
+                select="selectEquipmentTree"/>
+  </resultMap>
+
+  <!--
+  <resultMap id="equipmentBase" type="kr.co.atg.apds.komipo_main.entity.tobject.T_Equipment">
+    <collection property="child" 
+                column="{fid=facility_id,eid=equipment_id}" 
+                ofType="kr.co.atg.apds.main.entity.tobject.T_Machine" 
+                select="selectMachineTree"/>
+  </resultMap>
+
+  <resultMap id="machineBase" type="kr.co.atg.apds.komipo_main.entity.tobject.T_Machine">
+    <collection property="child" 
+                column="{fid=facility_id,eid=equipment_id,mid=machine_id}" 
+                ofType="kr.co.atg.apds.main.entity.tobject.T_Measurementpt" 
+                select="selectMeasurementpt"/>
+  </resultMap>
+-->
+
+  <!--
+  <resultMap id="alarmHistoryBase" type="kr.co.atg.apds.komipo_main.entity.dashboard.P_getAlarmHistory">
+    <result column="rawdata_id" property="rawdata_id" typeHandler="kr.co.atg.apds.komipo_main.config.typehandler.UUIDTypeHandler"/>
+  </resultMap>
+-->
+
+
+  <select id="selectFacilityTree" resultMap="facilityBase">
+    SELECT * FROM facility
+    where 1=1
+      and use_yn = 'Y'
+      and facility_id > 0
+    order by facility_id asc
+  </select>
+
+  <select id="selectFacilities" resultType="kr.co.atg.apds.komipo_main.entity.tobject.T_Facility">
+    SELECT * FROM facility
+    where 1=1
+      and use_yn = 'Y'
+      and facility_id > 0
+    order by facility_id asc
+  </select>
+
+</mapper>
