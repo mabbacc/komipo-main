@@ -1,0 +1,112 @@
+image: maven:latest
+
+stages:
+  - maven-build
+  - docker-build
+  - deploy
+
+variables:
+  IMAGE_NAME: "komipo-main"
+
+######################### Stg
+maven-build_stg:
+  stage: maven-build
+  variables:
+    GIT_STRATEGY: fetch
+  script:
+    - mvn clean package -P stg -Dmaven.test.skip=true
+  tags:
+    - komipo_main_stg
+  only:
+    - stg
+
+docker-build_stg:
+  stage: docker-build
+  image: docker:latest
+  variables:
+    GIT_STRATEGY: none
+  services:
+    - name: docker:19.03.12-dind
+  before_script:
+    - export VERSION=$(date +%y.%m.%d).stg
+    - echo $CI_REGISTRY_USER, $CI_REGISTRY_PASSWORD, $CI_REGISTRY
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY # gitlab repository 에 Login 합니다.
+  script:
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:$VERSION" -t "$CI_REGISTRY_IMAGE:stg" -f DockerfileStg . # docker 를 빌드합니다.  --pull 옵션은 '항상 최신 버전의 image 를 Pull 받음' -t 는 태그
+    - docker push --all-tags "$CI_REGISTRY_IMAGE" # CI_REGISTRY_IMAGE 는 다음과 같은 포맷임 [repositoryUrl/group/repo-id] ex) vcs.k1ple.com:8090/k1ple/atg/komipo-main
+    - echo "Registry image:" $CI_REGISTRY_IMAGE
+  tags:
+    - komipo_main_stg
+  only:
+    - stg
+
+deploy_stg:
+  stage: deploy
+  before_script:
+    - export VERSION=$(date +%y.%m.%d).stg
+  script:
+    # docker container 에 komipo-main 이 있는지 확인하고 해당 컨테이너를 정지시키고, 삭제합니다.
+    - if [ "$( docker container inspect -f '{{.State.Status}}' $IMAGE_NAME )" = "running" ];
+      then
+      docker stop $IMAGE_NAME;
+      docker container rm $IMAGE_NAME;
+      fi
+    # 새로운 image 를 실행합니다. -v 옵션(source:destination)으로 서버의 directory 를 docker 의 directory 로 마운트.
+    - echo "Docker RUN $IMAGE_NAME $CI_REGISTRY_IMAGE:$VERSION"
+    - docker run -p 36080:8080 -d --restart=always --name $IMAGE_NAME -v /etc/localtime:/etc/localtime -v /usr/share/zoneinfo/Asia/Seoul:/etc/timezone:ro $CI_REGISTRY_IMAGE:$VERSION
+  tags:
+    - komipo_main_stg
+  only:
+    - stg
+
+######################### Prd
+maven-build:
+  stage: maven-build
+  variables:
+    GIT_STRATEGY: fetch
+  script:
+    - mvn clean package -P prd -Dmaven.test.skip=true
+  tags:
+    - komipo_main_prd
+  only:
+    - main
+
+docker-build:
+  stage: docker-build
+  image: docker:latest
+  variables:
+    GIT_STRATEGY: none
+  services:
+    - name: docker:19.03.12-dind
+  before_script:
+    - export VERSION=$(date +%y.%m.%d).prd
+    - echo $CI_REGISTRY_USER, $CI_REGISTRY_PASSWORD, $CI_REGISTRY
+    - sleep 20
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY # gitlab repository 에 Login 합니다.
+  script:
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:$VERSION" -t "$CI_REGISTRY_IMAGE:prd" -f DockerfilePrd . # docker 를 빌드합니다.  --pull 옵션은 '항상 최신 버전의 image 를 Pull 받음' -t 는 태그
+    - docker push --all-tags "$CI_REGISTRY_IMAGE" # CI_REGISTRY_IMAGE 는 다음과 같은 포맷임 [repositoryUrl/group/repo-id] ex) vcs.k1ple.com:8090/k1ple/atg/komipo-main
+    - echo "Registry image:" $CI_REGISTRY_IMAGE
+  tags:
+    - komipo_main_prd
+  only:
+    - main
+
+deploy:
+  stage: deploy
+  before_script:
+    - export VERSION=$(date +%y.%m.%d).prd
+  script:
+    # docker container 에 komipo-main 이 있는지 확인하고 해당 컨테이너를 정지시키고, 삭제합니다.
+    - if [ "$( docker container inspect -f '{{.State.Status}}' $IMAGE_NAME )" == "running" ];
+      then
+      docker stop $IMAGE_NAME;
+      docker container rm $IMAGE_NAME;
+      fi
+    # 새로운 image 를 실행합니다. -v 옵션(source:destination)으로 서버의 directory 를 docker 의 directory 로 마운트.
+    - echo "Docker RUN $IMAGE_NAME $CI_REGISTRY_IMAGE:$VERSION"
+    - docker run -p 35080:8080 -d --restart=always --name $IMAGE_NAME -v /etc/localtime:/etc/localtime -v /usr/share/zoneinfo/Asia/Seoul:/etc/timezone:ro $CI_REGISTRY_IMAGE:$VERSION
+  tags:
+    - komipo_main_prd
+  only:
+    - main
