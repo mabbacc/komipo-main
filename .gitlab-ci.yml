@@ -30,9 +30,7 @@ docker-build_stg:
   before_script:
     - export VERSION=$(date +%y.%m.%d).stg
     - echo $CI_REGISTRY_USER, $CI_REGISTRY_PASSWORD, $CI_REGISTRY
-    - sleep 10
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY # gitlab repository 에 Login 합니다.
-    - sleep 10
   script:
     - sleep 10
     - docker build --pull -t "$CI_REGISTRY_IMAGE:$VERSION" -t "$CI_REGISTRY_IMAGE:stg" -f DockerfileStg . # docker 를 빌드합니다.  --pull 옵션은 '항상 최신 버전의 image 를 Pull 받음' -t 는 태그
