@@ -1,24 +1,23 @@
-package kr.co.atg.apds.komipo_main.fend.mapper.db2;
+package kr.co.atg.apds.komipo_main.fend.mapper.db1;
 
-import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+
+import kr.co.atg.apds.komipo_main.entity.tobject.C_Area;
 
 // import kr.co.atg.apds.komipo_main.entity.dashboard.P_getAlarmCnt;
 // import kr.co.atg.apds.komipo_main.entity.dashboard.P_getAlarmHistory;
 // import kr.co.atg.apds.komipo_main.entity.dashboard.P_getAlarmPer;
-import kr.co.atg.apds.komipo_main.entity.tobject.T_Facility;
+// import kr.co.atg.apds.komipo_main.entity.tobject.T_Facility;
 
 @Mapper
 public interface MainDashboardMapper {
 
   // 4-1 Facility > Equipment > Machine > MPT
-  List<T_Facility> selectFacilityTree();
+  List<C_Area> selectAreaTree();
 
-  List<T_Facility> selectFacilities();
+  List<C_Area> selectAreas();
 
   /*
   // 4-2 Vibration Overall Graph

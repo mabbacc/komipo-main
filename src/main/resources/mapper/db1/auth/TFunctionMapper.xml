@@ -3,41 +3,38 @@
         PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kr.co.atg.apds.komipo_main.fend.mapper.db1.TRoleMapper">
-
-    <!--  Upsert T_Role  -->
-    <insert id="upsertRole">
-        <foreach collection='roleList' item='item' index='index'>
-            MERGE INTO t_role
+<mapper namespace="kr.co.atg.apds.komipo_main.fend.mapper.db1.auth.TFunctionMapper">
+    <!--  Upsert t_function  -->
+    <insert id="upsertFunction">
+        <foreach collection='functionList' item='item' index='index'>
+            MERGE INTO t_function
             USING (SELECT 1 AS DUM) AS A
                 ON id = #{item.id}
             WHEN MATCHED THEN
                 UPDATE SET
-                    <if test="item.authority != null">authority = #{item.authority},</if>
+                    <if test="item.name != null">name = #{item.name},</if>
                     <if test="item.description != null">description = #{item.description},</if>
                     <if test="item.upd_uid != null">upd_uid = #{item.upd_uid},</if>
                     upd_dtm = GETDATE()
             WHEN NOT MATCHED THEN
-            INSERT(
-                    authority,
+                INSERT(
+                    name,
                     description,
                     crt_uid
-            )
-                    VALUES(
-                    #{item.authority},
+                )
+                VALUES(
+                    #{item.name},
                     #{item.description},
                     #{item.crt_uid}
-            );
+                );
         </foreach>
     </insert>
 
 
-    <!-- Delete T_Role -->
-    <delete id = "deleteRole">
+    <!-- Delete t_function -->
+    <delete id = "deleteFunction">
         DELETE
-        FROM t_role
+        FROM t_function
         WHERE id = #{id}
     </delete>
-
-
 </mapper>

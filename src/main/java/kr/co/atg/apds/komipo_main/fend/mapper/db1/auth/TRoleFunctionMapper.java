@@ -1,4 +1,4 @@
-package kr.co.atg.apds.komipo_main.fend.mapper.db1;
+package kr.co.atg.apds.komipo_main.fend.mapper.db1.auth;
 
 import kr.co.atg.apds.komipo_main.entity.tobject.T_Function;
 import kr.co.atg.apds.komipo_main.entity.tobject.T_Role_Function;
