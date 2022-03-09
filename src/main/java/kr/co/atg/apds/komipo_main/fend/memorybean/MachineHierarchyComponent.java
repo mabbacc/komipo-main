@@ -10,8 +10,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import kr.co.atg.apds.komipo_main.entity.tobject.T_Facility;
-import kr.co.atg.apds.komipo_main.fend.mapper.db2.MainDashboardMapper;
+import kr.co.atg.apds.komipo_main.entity.tobject.C_Area;
+import kr.co.atg.apds.komipo_main.fend.mapper.db1.MainDashboardMapper;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -23,7 +23,7 @@ public class MachineHierarchyComponent {
   /*************************************************************************************
    * Private Instances *
    **************************************************************************************/
-  private List<T_Facility> apdsAllObject; // All Authority Information Instance
+  private List<C_Area> apdsAllObject; // All Authority Information Instance
 
   @Autowired
   MachineHierarchyComponent(MainDashboardMapper _mainDashboardMapper) {
@@ -42,21 +42,21 @@ public class MachineHierarchyComponent {
     else
       this.apdsAllObject.clear();
 
-    List<T_Facility> tFacilityList = mainDashboardMapper.selectFacilityTree();
-    for (T_Facility tFacility : tFacilityList) {
-      this.apdsAllObject.add(tFacility);
+    List<C_Area> cAreaList = mainDashboardMapper.selectAreaTree();
+    for (C_Area cArea : cAreaList) {
+      this.apdsAllObject.add(cArea);
     }
 
   }
 
   /* Return FunctionName and T_Function_Api List Map */
-  public List<T_Facility> getAllFacilityTree() {
+  public List<C_Area> getAllFacilityTree() {
     return apdsAllObject;
   }
 
-  public T_Facility getFacility(Integer fid) {
+  public C_Area getFacility(Integer aid) {
     if (null == apdsAllObject)
       return null;
-    return apdsAllObject.stream().filter(item -> item.getFacility_id() == fid).findAny().orElse(null);
+    return apdsAllObject.stream().filter(item -> item.getAreakey() == aid).findAny().orElse(null);
   }
 }

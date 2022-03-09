@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.atg.apds.komipo_main.fend.mapper.db1.MainDashboardMapper">
+
+  <resultMap id="areaBase" type="kr.co.atg.apds.komipo_main.entity.tobject.C_Area">
+    <collection property="child" 
+                column="{akey=areakey}" 
+                ofType="kr.co.atg.apds.main.entity.tobject.C_Equipment" 
+                select="selectEquipmentTree"/>
+  </resultMap>
+
+  <resultMap id="equipmentBase" type="kr.co.atg.apds.komipo_main.entity.tobject.C_Equipment">
+    <collection property="child" 
+                column="{akey=areakey,ekey=equipmentkey}" 
+                ofType="kr.co.atg.apds.main.entity.tobject.C_Component" 
+                select="selectComponentTree"/>
+  </resultMap>
+
+  <resultMap id="componentBase" type="kr.co.atg.apds.komipo_main.entity.tobject.C_Component">
+    <collection property="child" 
+                column="{akey=areakey,ekey=equipmentkey,ckey=componentkey}" 
+                ofType="kr.co.atg.apds.main.entity.tobject.C_Measpt" 
+                select="selectMeasurementpt"/>
+  </resultMap>
+
+  <!--
+  <resultMap id="alarmHistoryBase" type="kr.co.atg.apds.komipo_main.entity.dashboard.P_getAlarmHistory">
+    <result column="rawdata_id" property="rawdata_id" typeHandler="kr.co.atg.apds.komipo_main.config.typehandler.UUIDTypeHandler"/>
+  </resultMap>
+-->
+
+
+  <select id="selectAreaTree" resultMap="areaBase">
+    SELECT * FROM c_area
+    where 1=1
+    order by areakey asc
+  </select>
+
+  <select id="selectAreas" resultType="kr.co.atg.apds.komipo_main.entity.tobject.C_Area">
+    SELECT * FROM c_area
+    where 1=1
+    order by facility_id asc
+  </select>
+
+  <select id="selectEquipmentTree" resultMap="equipmentBase">
+    SELECT * FROM c_equipment 
+    where 1=1
+      and areakey = ${akey}
+    order by equipmentkey asc
+  </select>
+
+  <select id="selectEquipments" resultType="kr.co.atg.apds.komipo_main.entity.tobject.C_Equipment">
+    SELECT * FROM c_equipment 
+    where 1=1
+      and areakey = ${akey}
+    order by equipmentkey asc
+  </select>
+
+
+  <select id="selectComponentTree" resultMap="componentBase">
+    SELECT * FROM c_component 
+    where 1=1
+      and areakey = ${akey}
+      and equipmentkey = ${ekey}
+    order by componentkey asc
+  </select>
+
+  <select id="selectComponents" resultType="kr.co.atg.apds.komipo_main.entity.tobject.C_Component">
+    SELECT * FROM c_component 
+    where 1=1
+      and areakey = ${akey}
+      and equipmentkey = ${ekey}
+    order by componentkey asc
+  </select>
+
+
+
+  <select id="selectMeasurementpt" resultType="kr.co.atg.apds.komipo_main.entity.tobject.C_Measpt">
+    SELECT * FROM c_measpt 
+    where 1=1
+      and areakey = ${akey}
+      and equipmentkey = ${ekey}
+      and componentkey = ${ckey}
+    order by mptkey asc
+  </select>
+
+
+
+</mapper>
