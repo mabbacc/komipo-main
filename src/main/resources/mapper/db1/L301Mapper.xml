@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.atg.apds.komipo_main.fend.mapper.db1.L301Mapper">
+
+
+  <select id="getOverallTrend" resultType="kr.co.atg.apds.komipo_main.entity.pobject.P_getOverallTrend">
+    SELECT * from public.get_overall_trend_itv(9, '10 days', '2019-11-08')
+  </select>
+
+
+
+</mapper>
