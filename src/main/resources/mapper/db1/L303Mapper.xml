@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.atg.apds.komipo_main.fend.mapper.db1.L303Mapper">
+
+
+  <select id="getWaveform" resultType="kr.co.atg.apds.komipo_main.entity.pobject.P_getWaveform">
+    SELECT * from public.get_waveform(9, '2019-10-29 08:13:39')
+  </select>
+
+</mapper>

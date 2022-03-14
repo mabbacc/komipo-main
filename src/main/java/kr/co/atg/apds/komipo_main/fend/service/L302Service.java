@@ -19,7 +19,7 @@ public class L302Service {
   @Autowired
   L302Mapper l302mapper;
 
-  public GraphObject<Double> getOverallTrend() {
+  public GraphObject<Double> getMultiTrend() {
 
     List<P_getMultiTrend> rawdata = l302mapper.getMultiTrend();
 

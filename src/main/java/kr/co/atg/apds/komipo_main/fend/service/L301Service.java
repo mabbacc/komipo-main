@@ -22,34 +22,37 @@ public class L301Service {
 
     List<P_getOverallTrend> rawdata = l301mapper.getOverallTrend();
 
-
-
     GraphObject<Double> go = new GraphObject<>();
 
     // xaxis
     GraphXaxisObject xaxisObject = new GraphXaxisObject();
     ArrayList<String> xaxisCategories = new ArrayList<>();
 
-
     // data
-    GraphDataListObject<Double> mox = new GraphDataListObject<>("MOX");
-    GraphDataListObject<Double> moy = new GraphDataListObject<>("MOY");
+    for (P_getOverallTrend item : rawdata) {
 
-    for ( P_getOverallTrend item : rawdata) {
-      if (item.getMptid().equals("MOX"))       mox.getDataList().add(item.getOverall());
-      else if (item.getMptid().equals("MOY"))  moy.getDataList().add(item.getOverall());
+      // find same key
+      boolean isFind = false;
+      for (GraphDataListObject<Double> series : go.getSeriesList()) {
+        if (series.getName().equals(item.getMptid())) {
+          series.getDataList().add(item.getOverall());
+          isFind = true;
+        }
+      }
+      if (!isFind) {
+        GraphDataListObject<Double> series = new GraphDataListObject<>(item.getMptid());
+        series.getDataList().add(item.getOverall());
+        go.getSeriesList().add(series);
+      }
 
-      if (!xaxisCategories.contains(item.getMeasdt())) xaxisCategories.add(item.getMeasdt());
+      if (!xaxisCategories.contains(item.getMeasdt()))
+        xaxisCategories.add(item.getMeasdt());
     }
 
     xaxisObject.setCategories(xaxisCategories);
     go.setXaxisObject(xaxisObject);
 
-    if ( null == go.getSeriesList() ) { go.setSeriesList(new ArrayList<>());}
-    go.getSeriesList().add(mox);
-    go.getSeriesList().add(moy);
-
     return go;
   }
-  
+
 }
