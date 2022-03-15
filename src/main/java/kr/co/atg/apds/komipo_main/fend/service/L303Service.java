@@ -22,7 +22,7 @@ public class L303Service {
   @Autowired
   L303Mapper l303mapper;
 
-  public List<GraphObject<Object>> getWaveform() {
+  public List<GraphObject<Object>> getWaveform(boolean isFiltered) {
 
     List<P_getWaveform> rawdata = l303mapper.getWaveform();
     /* rawdata */
@@ -66,26 +66,46 @@ public class L303Service {
       GraphDataListObject<Object> gdlo = new GraphDataListObject<>(item.getMptid());
       List<Object> data = new ArrayList<>();
 
-      byte[] rawdata_hex = item.getRawdata();
-      DoubleBuffer doubleBuffer = ByteBuffer.wrap(rawdata_hex).order(ByteOrder.LITTLE_ENDIAN).asDoubleBuffer();
-      double[] dst = new double[doubleBuffer.capacity()];
-      doubleBuffer.get(dst);
+      if (!isFiltered) {
+        // Non Filter 면 RawData 를 잘라서 그대로 보여줌.
+        byte[] rawdata_hex = item.getRawdata();
+        DoubleBuffer doubleBuffer = ByteBuffer.wrap(rawdata_hex).order(ByteOrder.LITTLE_ENDIAN).asDoubleBuffer();
+        double[] dst = new double[doubleBuffer.capacity()];
+        doubleBuffer.get(dst);
 
-      System.out.println("Length Compare [" + dst.length + ":" + item.getLineresolution() + "]");
+        System.out.println("Length Compare [" + dst.length + ":" + item.getLineresolution() + "]");
 
-      for (int j = 0; j < dst.length; j++) {
-        data.add(dst[j]);
-        if (0 == i)
-          xaxisCategories.add("" + j); // i 가 '0' 이라는 건 첫번째 루프라는 것임. 이때 Xaxis 만듦.
+        for (int j = 0; j < dst.length; j++) {
+          data.add(dst[j]);
+          if (0 == i)
+            xaxisCategories.add("" + j); // i 가 '0' 이라는 건 첫번째 루프라는 것임. 이때 Xaxis 만듦.
 
-        if (0 == i) {
-          XY<Double> xy = new XY<>(dst[j], null);
-          gdloxy.getDataList().add(xy);
-        } else if (1 == i) {
-          @SuppressWarnings("unchecked")
-          XY<Double> xy = (XY<Double>) gdloxy.getDataList().get(j);
-          xy.setY(dst[j]);
+          if (0 == i) {
+            XY<Double> xy = new XY<>(dst[j], null);
+            gdloxy.getDataList().add(xy);
+          } else if (1 == i) {
+            @SuppressWarnings("unchecked")
+            XY<Double> xy = (XY<Double>) gdloxy.getDataList().get(j);
+            xy.setY(dst[j]);
+          }
         }
+      } else {
+        // 1X Filter 면 1xAmp, 1xPhase 를 이용하여 Sin 곡선을 만들어서 보여줌. ( RawData 무시 )
+        data.addAll(_convWaveformToFilter(item.getRpm(), item.getDeltatime(), item.getLineresolution(),
+            item.getOnexamp(), item.getOnexphase()));
+
+        for (int j = 0; j < item.getLineresolution(); j++) {
+          xaxisCategories.add("" + j); // i 가 '0' 이라는 건 첫번째 루프라는 것임. 이때 Xaxis 만듦.
+          if (0 == i) {
+            XY<Double> xy = new XY<>((double)data.get(j), null);
+            gdloxy.getDataList().add(xy);
+          } else if (1 == i) {
+            @SuppressWarnings("unchecked")
+            XY<Double> xy = (XY<Double>) gdloxy.getDataList().get(j);
+            xy.setY((double)data.get(j));
+          }
+        }
+
       }
 
       gdlo.setDataList(data);
@@ -105,4 +125,18 @@ public class L303Service {
     return goList;
   }
 
+  /* Waveform 데이터에 1x Filtering을 적용한 sin 파형 변환 로직 */
+  private List<Double> _convWaveformToFilter(Double rpm, Double deltatime, int lineResolution, Double amp1x,
+      Double phase1x) {
+
+    double reSample = 60 / rpm / deltatime;
+    List<Double> itemList = new ArrayList<>();
+    for (int i = 0; i < lineResolution; ++i) {
+
+      double wave = amp1x * Math.sin(((90 - phase1x) / 360 * reSample + i) * 2 * Math.PI / reSample);
+      itemList.add(wave);
+    }
+
+    return itemList;
+  }
 }
