@@ -6,6 +6,7 @@ import lombok.Data;
 public class P_getMultiTrend {
   String paramid;
   Integer paramidx;
+  Integer paramtype;
   String measdt;
   Double datavalue;
 }

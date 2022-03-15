@@ -36,7 +36,14 @@ public class L302Service {
 
       // find same key and add it.
       boolean isFind = false;
-      for (GraphDataListObject<Double> series : go.getSeriesList()) {
+      List<GraphDataListObject<Double>> baseList;
+      if (6 != item.getParamtype()) {
+        baseList = go.getSeriesList(); // upper graph
+      } else {
+        baseList = go2.getSeriesList(); // lower graph
+      }
+
+      for (GraphDataListObject<Double> series : baseList) {
         if (series.getName().equals(item.getParamid())) {
           series.getDataList().add(item.getDatavalue());
           isFind = true;
@@ -46,7 +53,7 @@ public class L302Service {
         // if finding is failed, create new one.
         GraphDataListObject<Double> series = new GraphDataListObject<>(item.getParamid());
         series.getDataList().add(item.getDatavalue());
-        go.getSeriesList().add(series);
+        baseList.add(series);
       }
 
       if (!xaxisCategories.contains(item.getMeasdt()))
@@ -56,7 +63,8 @@ public class L302Service {
     xaxisObject.setCategories(xaxisCategories);
     List<GraphAxisObject> xaxisObjectList = new ArrayList<>();
     xaxisObjectList.add(xaxisObject);
-    go.setXaxisObject(xaxisObjectList);
+    go.setXaxisObject(xaxisObjectList); // go - upper graph
+    go2.setXaxisObject(xaxisObjectList); // go2 - lower graph
 
     // yaxis - opposite
     List<GraphAxisObject> yaxisObjectList = new ArrayList<>();
@@ -71,6 +79,7 @@ public class L302Service {
     go.setYaxisObject(yaxisObjectList);
 
     goList.add(go);
+    goList.add(go2);
     return goList;
   }
 
