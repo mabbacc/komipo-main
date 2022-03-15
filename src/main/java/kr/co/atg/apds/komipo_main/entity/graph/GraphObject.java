@@ -15,7 +15,10 @@ public class GraphObject<T> {
   List<GraphDataListObject<T>> seriesList;
 
   @JsonProperty("xaxis")
-  GraphXaxisObject xaxisObject;
+  List<GraphAxisObject> xaxisObject;
+
+  @JsonProperty("yaxis")
+  List<GraphAxisObject> yaxisObject;
 
   public GraphObject() {
     this.seriesList = new ArrayList<>();

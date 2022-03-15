@@ -1,5 +1,7 @@
 package kr.co.atg.apds.komipo_main.fend.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,7 +25,7 @@ public class L302Controller {
   }
 
   @GetMapping("/detail-analysis/multi-trend")
-  public GraphObject<Double> getMultilTrend(HttpServletRequest req, HttpServletResponse res) {
+  public List<GraphObject<Double>> getMultilTrend(HttpServletRequest req, HttpServletResponse res) {
 
     return l302Service.getMultiTrend();
   }

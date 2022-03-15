@@ -9,10 +9,16 @@ import lombok.Data;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GraphXaxisObject {
+public class GraphAxisObject {
+
+  @JsonProperty("opposite")
+  Boolean opposite;
 
   @JsonProperty("title")
-  GrapeXaxisTitleObject title;
+  GrapeAxisTitleObject title;
+
+  @JsonProperty("seriesName")
+  String seriesName;
 
   @JsonProperty("categories")
   List<String> categories;
@@ -24,6 +30,6 @@ public class GraphXaxisObject {
   String max;
 
   @JsonProperty("reserved")
-  String reserved; 
+  String reserved;
 
 }

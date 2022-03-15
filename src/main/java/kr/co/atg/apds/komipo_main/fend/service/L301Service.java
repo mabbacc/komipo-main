@@ -6,9 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.co.atg.apds.komipo_main.entity.graph.GraphAxisObject;
 import kr.co.atg.apds.komipo_main.entity.graph.GraphDataListObject;
 import kr.co.atg.apds.komipo_main.entity.graph.GraphObject;
-import kr.co.atg.apds.komipo_main.entity.graph.GraphXaxisObject;
 import kr.co.atg.apds.komipo_main.entity.pobject.P_getOverallTrend;
 import kr.co.atg.apds.komipo_main.fend.mapper.db1.L301Mapper;
 
@@ -25,7 +25,7 @@ public class L301Service {
     GraphObject<Double> go = new GraphObject<>();
 
     // xaxis
-    GraphXaxisObject xaxisObject = new GraphXaxisObject();
+    GraphAxisObject xaxisObject = new GraphAxisObject();
     ArrayList<String> xaxisCategories = new ArrayList<>();
 
     // data
@@ -50,7 +50,9 @@ public class L301Service {
     }
 
     xaxisObject.setCategories(xaxisCategories);
-    go.setXaxisObject(xaxisObject);
+    List<GraphAxisObject>xaxisObjectList = new ArrayList<>();
+    xaxisObjectList.add(xaxisObject);
+    go.setXaxisObject(xaxisObjectList);
 
     return go;
   }
