@@ -29,6 +29,7 @@ public class L303Controller {
   public List<GraphObject<Object>> getWaveform(HttpServletRequest req, HttpServletResponse res,
       @RequestParam(name = "filter", required = false) Boolean filter) {
 
+        if ( null == filter) filter = false;
     return l303Service.getWaveform(filter);
   }
 
