@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import kr.co.atg.apds.komipo_main.entity.graph.GraphObject;
 import kr.co.atg.apds.komipo_main.entity.graph.PlotlyDataObject;
 import kr.co.atg.apds.komipo_main.fend.service.L305Service;
 
@@ -26,7 +25,7 @@ public class L305Controller {
   }
 
   @GetMapping("/detail-analysis/waterfall")
-  public List<PlotlyDataObject<Double>> getSpectrum(HttpServletRequest req, HttpServletResponse res) {
+  public List<List<PlotlyDataObject<Object>>> getSpectrum(HttpServletRequest req, HttpServletResponse res) {
 
     return l305Service.getWaterfall();
   }
