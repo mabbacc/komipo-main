@@ -26,7 +26,7 @@ public class L303Controller {
 
   
   @GetMapping("/detail-analysis/waveform")
-  public List<GraphObject<Double>> getWaveform(HttpServletRequest req, HttpServletResponse res) {
+  public List<GraphObject<Object>> getWaveform(HttpServletRequest req, HttpServletResponse res) {
 
     return l303Service.getWaveform();
   }
