@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.atg.apds.komipo_main.entity.graph.GraphObject;
+import kr.co.atg.apds.komipo_main.entity.pobject.P_getWaveformList;
 import kr.co.atg.apds.komipo_main.fend.service.L303Service;
 
 @RestController
@@ -27,10 +28,20 @@ public class L303Controller {
 
   @GetMapping("/detail-analysis/waveform")
   public List<GraphObject<Object>> getWaveform(HttpServletRequest req, HttpServletResponse res,
-      @RequestParam(name = "filter", required = false) Boolean filter) {
+      @RequestParam(name = "filter", required = false) Boolean filter,
+      @RequestParam("mptkey") Integer mptkey,
+      @RequestParam("measdt") String measdt) {
 
-        if ( null == filter) filter = false;
-    return l303Service.getWaveform(filter);
+    if (null == filter)
+      filter = false;
+    return l303Service.getWaveform(filter, mptkey, measdt);
+  }
+
+  @GetMapping("/detail-analysis/waveform-dt-list")
+  public List<P_getWaveformList> getWaveformList(HttpServletRequest req, HttpServletResponse res,
+      @RequestParam("mptkey") Integer mptkey) {
+    return l303Service.getWaveformList(mptkey);
+
   }
 
 }

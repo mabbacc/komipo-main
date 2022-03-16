@@ -8,7 +8,7 @@ public class P_getWaterfall {
   Integer mptkey;
   String measdt;
   Integer spctype;
-  Integer fmax;
+  Double fmax;
   Integer windowfunc;
   Double deltafreq;
   Double deltaorder;

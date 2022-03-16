@@ -14,6 +14,7 @@ import kr.co.atg.apds.komipo_main.entity.graph.GraphAxisObject;
 import kr.co.atg.apds.komipo_main.entity.graph.GraphDataListObject;
 import kr.co.atg.apds.komipo_main.entity.graph.GraphObject;
 import kr.co.atg.apds.komipo_main.entity.pobject.P_getWaveform;
+import kr.co.atg.apds.komipo_main.entity.pobject.P_getWaveformList;
 import kr.co.atg.apds.komipo_main.fend.mapper.db1.L303Mapper;
 
 @Service
@@ -22,9 +23,9 @@ public class L303Service {
   @Autowired
   L303Mapper l303mapper;
 
-  public List<GraphObject<Object>> getWaveform(boolean isFiltered) {
+  public List<GraphObject<Object>> getWaveform(boolean isFiltered, int mptkey, String measdt) {
 
-    List<P_getWaveform> rawdata = l303mapper.getWaveform();
+    List<P_getWaveform> rawdata = l303mapper.getWaveform(mptkey, measdt);
     /* rawdata */
     /*
      * ------|-------|--------------------|--------|---------------|----------------
@@ -97,12 +98,12 @@ public class L303Service {
         for (int j = 0; j < item.getLineresolution(); j++) {
           xaxisCategories.add("" + j); // i 가 '0' 이라는 건 첫번째 루프라는 것임. 이때 Xaxis 만듦.
           if (0 == i) {
-            XY<Double> xy = new XY<>((double)data.get(j), null);
+            XY<Double> xy = new XY<>((double) data.get(j), null);
             gdloxy.getDataList().add(xy);
           } else if (1 == i) {
             @SuppressWarnings("unchecked")
             XY<Double> xy = (XY<Double>) gdloxy.getDataList().get(j);
-            xy.setY((double)data.get(j));
+            xy.setY((double) data.get(j));
           }
         }
 
@@ -123,6 +124,10 @@ public class L303Service {
     goList.add(goxy);
 
     return goList;
+  }
+
+  public List<P_getWaveformList> getWaveformList(int mptkey) {
+    return l303mapper.getWaveformList(mptkey);
   }
 
   /* Waveform 데이터에 1x Filtering을 적용한 sin 파형 변환 로직 */

@@ -8,9 +8,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.atg.apds.komipo_main.entity.graph.GraphObject;
+import kr.co.atg.apds.komipo_main.entity.pobject.P_getSpectrumList;
 import kr.co.atg.apds.komipo_main.fend.service.L304Service;
 
 @RestController
@@ -25,9 +27,19 @@ public class L304Controller {
   }
 
   @GetMapping("/detail-analysis/spectrum")
-  public List<GraphObject<Object>> getSpectrum(HttpServletRequest req, HttpServletResponse res) {
+  public List<GraphObject<Object>> getSpectrum(HttpServletRequest req, HttpServletResponse res,
+      @RequestParam("mptkey") Integer mptkey,
+      @RequestParam("measdt") String measdt
+  ) {
 
-    return l304Service.getSpectrum();
+    return l304Service.getSpectrum(mptkey, measdt);
+  }
+
+  @GetMapping("/detail-analysis/spectrum-dt-list")
+  public List<P_getSpectrumList> getSpectrumList(HttpServletRequest req, HttpServletResponse res, 
+      @RequestParam("mptkey") Integer mptkey) {
+
+    return l304Service.getSpectrumList(mptkey);
   }
 
 }

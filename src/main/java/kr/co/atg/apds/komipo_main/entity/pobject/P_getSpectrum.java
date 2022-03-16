@@ -8,7 +8,7 @@ public class P_getSpectrum {
   Integer mptkey;
   String measdt;
   Integer spctype;
-  Integer fmax;
+  Double fmax;
   Integer windowfunc;
   Double deltafreq;
   Double deltaorder;

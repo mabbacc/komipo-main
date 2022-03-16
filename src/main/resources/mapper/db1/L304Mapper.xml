@@ -7,8 +7,10 @@
 
 
   <select id="getSpectrum" resultType="kr.co.atg.apds.komipo_main.entity.pobject.P_getSpectrum">
-    SELECT * from public.get_spectrum(9, '2019-10-29 08:13:39')
-
+    SELECT * from public.get_spectrum(${mptkey}, #{measdt})
   </select>
 
+  <select id="getSpectrumList" resultType="kr.co.atg.apds.komipo_main.entity.pobject.P_getSpectrumList">
+    SELECT * from public.get_spectrum_list(${mptkey})
+  </select>
 </mapper>

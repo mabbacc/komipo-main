@@ -14,6 +14,7 @@ import kr.co.atg.apds.komipo_main.entity.graph.GraphAxisObject;
 import kr.co.atg.apds.komipo_main.entity.graph.GraphDataListObject;
 import kr.co.atg.apds.komipo_main.entity.graph.GraphObject;
 import kr.co.atg.apds.komipo_main.entity.pobject.P_getSpectrum;
+import kr.co.atg.apds.komipo_main.entity.pobject.P_getSpectrumList;
 import kr.co.atg.apds.komipo_main.fend.mapper.db1.L304Mapper;
 
 @Service
@@ -22,9 +23,9 @@ public class L304Service {
   @Autowired
   L304Mapper l304mapper;
 
-  public List<GraphObject<Object>> getSpectrum() {
+  public List<GraphObject<Object>> getSpectrum(int mptkey, String measdt) {
 
-    List<P_getSpectrum> rawdata = l304mapper.getSpectrum();
+    List<P_getSpectrum> rawdata = l304mapper.getSpectrum(mptkey, measdt);
     /* rawdata */
     /*
      * |------|-------|--------------------|--------|-----|-----------|-------------
@@ -104,6 +105,10 @@ public class L304Service {
     // goList.add(goxy);
 
     return goList;
+  }
+
+  public List<P_getSpectrumList> getSpectrumList(int mptkey) {
+    return l304mapper.getSpectrumList(mptkey);
   }
 
 }
