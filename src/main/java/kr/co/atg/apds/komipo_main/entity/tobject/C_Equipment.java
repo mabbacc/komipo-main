@@ -11,6 +11,7 @@ public class C_Equipment {
   String equipmentid;
   String description;
   Double referencerpm;
+  String equipmenttype;
 
   List<C_Component> child;
 }
