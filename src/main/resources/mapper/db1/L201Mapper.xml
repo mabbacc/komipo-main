@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.atg.apds.komipo_main.fend.mapper.db1.L201Mapper">
+
+
+  <select id="getComparativeStatus" resultType="kr.co.atg.apds.komipo_main.entity.pobject.P_getComparativeStatus">
+    SELECT equipmenttype, equipmentid, mptid, measdt, overall from get_comparative_status(#{equipmenttype})
+  </select>
+
+  <select id="getComparativeTrend" resultType="kr.co.atg.apds.komipo_main.entity.pobject.P_getComparativeTrend">
+    <choose>
+      <when test='null != itv'>
+        SELECT equipmenttype, equipmentid, mptid, measdt, overall, units, unitstr from get_comparative_trend_itv(#{equipmenttype}, #{itv}, #{edt})
+      </when>
+      <otherwise>
+        SELECT equipmenttype, equipmentid, mptid, measdt, overall, units, unitstr from get_comparative_trend_dt(#equipmenttype}, #{sdt}, #{edt})
+      </otherwise>
+    </choose>
+  </select>
+
+
+</mapper>
