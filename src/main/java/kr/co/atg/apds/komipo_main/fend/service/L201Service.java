@@ -12,7 +12,6 @@ import kr.co.atg.apds.komipo_main.entity.graph.GraphDataListObject;
 import kr.co.atg.apds.komipo_main.entity.graph.GraphObject;
 import kr.co.atg.apds.komipo_main.entity.pobject.P_getComparativeStatus;
 import kr.co.atg.apds.komipo_main.entity.pobject.P_getComparativeTrend;
-import kr.co.atg.apds.komipo_main.entity.pobject.P_getOverallTrend;
 import kr.co.atg.apds.komipo_main.fend.mapper.db1.L201Mapper;
 
 @Service
