@@ -3,6 +3,7 @@ package kr.co.atg.apds.komipo_main.fend.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.postgresql.util.PGInterval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +19,17 @@ public class L301Service {
   @Autowired
   L301Mapper l301mapper;
 
-  public GraphObject<Double> getOverallTrend() {
+  public GraphObject<Double> getOverallTrend(Integer mptkey, String itv, String sdt, String edt) {
 
-    List<P_getOverallTrend> rawdata = l301mapper.getOverallTrend();
+    PGInterval pgitv = null;
+    if (null != itv)
+      try {
+        pgitv = new PGInterval(itv);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+
+    List<P_getOverallTrend> rawdata = l301mapper.getOverallTrend(mptkey, pgitv, sdt, edt);
 
     GraphObject<Double> go = new GraphObject<>();
 
@@ -50,7 +59,7 @@ public class L301Service {
     }
 
     xaxisObject.setCategories(xaxisCategories);
-    List<GraphAxisObject>xaxisObjectList = new ArrayList<>();
+    List<GraphAxisObject> xaxisObjectList = new ArrayList<>();
     xaxisObjectList.add(xaxisObject);
     go.setXaxisObject(xaxisObjectList);
 

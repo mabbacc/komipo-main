@@ -9,7 +9,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import kr.co.atg.apds.komipo_main.entity.XY;
 import kr.co.atg.apds.komipo_main.entity.graph.GraphAxisObject;
 import kr.co.atg.apds.komipo_main.entity.graph.GraphDataListObject;
 import kr.co.atg.apds.komipo_main.entity.graph.GraphObject;

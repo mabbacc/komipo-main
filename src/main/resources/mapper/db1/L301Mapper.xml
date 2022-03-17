@@ -7,7 +7,14 @@
 
 
   <select id="getOverallTrend" resultType="kr.co.atg.apds.komipo_main.entity.pobject.P_getOverallTrend">
-    SELECT * from public.get_overall_trend_itv(9, '10 days', '2019-11-08')
+    <choose>
+      <when test='null != itv'>
+      SELECT * from public.get_overall_trend_itv(${mptkey}, #{itv}, #{edt})
+      </when>
+      <otherwise>
+      SELECT * from public.get_overall_trend_dt(${mptkey}, #{sdt}, #{edt})
+      </otherwise>
+    </choose>
   </select>
 
 

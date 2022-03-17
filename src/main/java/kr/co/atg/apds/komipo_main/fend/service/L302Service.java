@@ -3,6 +3,7 @@ package kr.co.atg.apds.komipo_main.fend.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.postgresql.util.PGInterval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +19,17 @@ public class L302Service {
   @Autowired
   L302Mapper l302mapper;
 
-  public List<GraphObject<Double>> getMultiTrend() {
+  public List<GraphObject<Double>> getMultiTrend(Integer mptkey, String itv, String sdt, String edt) {
 
-    List<P_getMultiTrend> rawdata = l302mapper.getMultiTrend();
+    PGInterval pgitv = null;
+    if (null != itv)
+      try {
+        pgitv = new PGInterval(itv);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+
+    List<P_getMultiTrend> rawdata = l302mapper.getMultiTrend(mptkey, pgitv, sdt, edt);
 
     List<GraphObject<Double>> goList = new ArrayList<>();
 

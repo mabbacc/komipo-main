@@ -6,6 +6,7 @@ import java.nio.DoubleBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.postgresql.util.PGInterval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +20,17 @@ public class L305Service {
   @Autowired
   L305Mapper l305mapper;
 
-  public List<List<PlotlyDataObject<Object>>> getWaterfall() {
+  public List<List<PlotlyDataObject<Object>>> getWaterfall(Integer mptkey, String itv, String sdt, String edt) {
 
-    List<P_getWaterfall> rawdata = l305mapper.getWaterfall();
+    PGInterval pgitv = null;
+    if (null != itv)
+      try {
+        pgitv = new PGInterval(itv);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+
+    List<P_getWaterfall> rawdata = l305mapper.getWaterfall(mptkey, pgitv, sdt, edt);
 
     List<List<PlotlyDataObject<Object>>> all = new ArrayList<>();
 
