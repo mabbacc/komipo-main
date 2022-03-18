@@ -64,6 +64,12 @@ public class MachineHierarchyComponent {
         }
         if ( !isFind ) {
           S_EquipmentTree newEqTree = new S_EquipmentTree();
+
+          for (C_Area cArea : cAreaList) 
+            if ( cArea.getAreakey().equals(equipment.getAreakey()) ) 
+              newEqTree.setAreaid( cArea.getAreaid() );
+
+          newEqTree.setAreakey(equipment.getAreakey());
           newEqTree.setEquipmenttype(equipment.getEquipmenttype());
           newEqTree.setChild(new ArrayList<>());
           newEqTree.getChild().add(equipment);
