@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.atg.apds.komipo_main.entity.tobject.C_Area;
+import kr.co.atg.apds.komipo_main.entity.tobject.S_EquipmentTree;
 import kr.co.atg.apds.komipo_main.fend.memorybean.MachineHierarchyComponent;
 import kr.co.atg.apds.komipo_main.security.model.FendResponseObject;
 
@@ -41,6 +42,27 @@ public class MainDashboardController {
           if ( null == cAreaList || cAreaList.isEmpty() ) return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
           FendResponseObject<List<C_Area>> ro = new FendResponseObject<>("Success");
           ro.setData(cAreaList);
+
+          return new ResponseEntity<>(ro, HttpStatus.OK);
+
+      }catch(Exception e){
+          e.printStackTrace();
+          return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+      }
+
+  }
+
+  @GetMapping("/dashboard/equipment")
+  public ResponseEntity<FendResponseObject<List<S_EquipmentTree>>> getEquipmentList(
+      HttpServletRequest req, HttpServletResponse res
+  ){
+
+      try {
+          // List<T_Facility> tAreaList = mainDashboardService.selectDashboardMachines();
+          List<S_EquipmentTree> sEquipmentTrees = machineHierarchyComponent.getEquipmentTree();
+          if ( null == sEquipmentTrees || sEquipmentTrees.isEmpty() ) return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+          FendResponseObject<List<S_EquipmentTree>> ro = new FendResponseObject<>("Success");
+          ro.setData(sEquipmentTrees);
 
           return new ResponseEntity<>(ro, HttpStatus.OK);
 
