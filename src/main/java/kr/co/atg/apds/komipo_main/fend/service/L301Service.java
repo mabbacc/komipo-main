@@ -22,12 +22,14 @@ public class L301Service {
   public GraphObject<Double> getOverallTrend(Integer mptkey, String itv, String sdt, String edt) {
 
     PGInterval pgitv = null;
-    if (null != itv)
+    if (null != itv) {
+      if ( itv.contains("week") ) itv="7 day";
       try {
         pgitv = new PGInterval(itv);
       } catch (Exception e) {
         e.printStackTrace();
       }
+    }
 
     List<P_getOverallTrend> rawdata = l301mapper.getOverallTrend(mptkey, pgitv, sdt, edt);
 
