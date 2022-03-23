@@ -13,4 +13,8 @@
   <select id="getSpectrumList" resultType="kr.co.atg.apds.komipo_main.entity.pobject.P_getSpectrumList">
     SELECT * from public.get_spectrum_list(${mptkey})
   </select>
+
+  <select id="getSpectrumListDt" resultType="kr.co.atg.apds.komipo_main.entity.pobject.P_getSpectrumList">
+    SELECT * from public.get_spectrum_list_dt(${mptkey}, #{dt})
+  </select>
 </mapper>

@@ -34,11 +34,15 @@ SELECT * from public.get_multi_trend_dt(9, '2019-10-28', '2019-11-08')
 -- --------------------------------
 SELECT * from public.get_waveform(9, '2019-10-29 08:13:39')
 select * from public.get_waveform_list(5);
+select * from public.get_waveform_list_dt(5, null)
+select * from public.get_waveform_list_dt(5, '2019-11-03')
 -- --------------------------------
 -- 304
 -- --------------------------------
 SELECT * from public.get_spectrum(9, '2019-10-29 08:13:39')
 select * from public.get_spectrum_list(9)
+select * from public.get_spectrum_list_dt(9, null)
+select * from public.get_spectrum_list_dt(9, '2019-08-24')
 -- --------------------------------
 -- 305
 -- --------------------------------

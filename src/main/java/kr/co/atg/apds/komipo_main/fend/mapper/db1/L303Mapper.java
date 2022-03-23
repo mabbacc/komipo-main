@@ -13,5 +13,6 @@ public interface L303Mapper {
 
   List<P_getWaveform> getWaveform(@Param("mptkey") Integer mptkey, @Param("measdt") String measdt);
   List<P_getWaveformList> getWaveformList(@Param("mptkey") Integer mptkey);
+  List<P_getWaveformList> getWaveformListDt(@Param("mptkey") Integer mptkey, @Param("dt") String dt);
 
 }

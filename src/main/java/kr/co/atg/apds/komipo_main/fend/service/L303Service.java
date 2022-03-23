@@ -13,6 +13,7 @@ import kr.co.atg.apds.komipo_main.entity.XY;
 import kr.co.atg.apds.komipo_main.entity.graph.GraphAxisObject;
 import kr.co.atg.apds.komipo_main.entity.graph.GraphDataListObject;
 import kr.co.atg.apds.komipo_main.entity.graph.GraphObject;
+import kr.co.atg.apds.komipo_main.entity.pobject.C_selectDate;
 import kr.co.atg.apds.komipo_main.entity.pobject.P_getWaveform;
 import kr.co.atg.apds.komipo_main.entity.pobject.P_getWaveformList;
 import kr.co.atg.apds.komipo_main.fend.mapper.db1.L303Mapper;
@@ -128,6 +129,23 @@ public class L303Service {
 
   public List<P_getWaveformList> getWaveformList(int mptkey) {
     return l303mapper.getWaveformList(mptkey);
+  }
+
+  public C_selectDate getWaveformListDt(int mptkey, String dt) {
+    List<P_getWaveformList> waveformLists = l303mapper.getWaveformListDt(mptkey, dt);
+
+    C_selectDate ret = null;
+    String latestDt = dt;
+    if ( null == dt ) {
+      latestDt = waveformLists.get(0).getMeasdt().substring(0, 10);
+    }
+    ret = new C_selectDate(latestDt);
+    for ( P_getWaveformList item: waveformLists) {
+      if (item.getMeasdt().startsWith(latestDt))  
+        ret.getChild().add(item) ;
+    };
+
+    return ret;
   }
 
   /* Waveform 데이터에 1x Filtering을 적용한 sin 파형 변환 로직 */

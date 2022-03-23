@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import kr.co.atg.apds.komipo_main.entity.graph.GraphAxisObject;
 import kr.co.atg.apds.komipo_main.entity.graph.GraphDataListObject;
 import kr.co.atg.apds.komipo_main.entity.graph.GraphObject;
+import kr.co.atg.apds.komipo_main.entity.pobject.C_selectDate;
 import kr.co.atg.apds.komipo_main.entity.pobject.P_getSpectrum;
 import kr.co.atg.apds.komipo_main.entity.pobject.P_getSpectrumList;
 import kr.co.atg.apds.komipo_main.fend.mapper.db1.L304Mapper;
@@ -110,4 +111,20 @@ public class L304Service {
     return l304mapper.getSpectrumList(mptkey);
   }
 
+  public C_selectDate getSpectrumListDt(int mptkey, String dt) {
+    List<P_getSpectrumList> spectrumLists = l304mapper.getSpectrumListDt(mptkey, dt);
+
+    C_selectDate ret = null;
+    String latestDt = dt;
+    if ( null == dt ) {
+      latestDt = spectrumLists.get(0).getMeasdt().substring(0, 10);
+    }
+    ret = new C_selectDate(latestDt);
+    for ( P_getSpectrumList item: spectrumLists) {
+      if (item.getMeasdt().startsWith(latestDt))  
+        ret.getChild().add(item) ;
+    };
+
+    return ret;
+  }
 }

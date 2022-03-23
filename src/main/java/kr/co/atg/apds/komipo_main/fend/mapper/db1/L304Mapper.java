@@ -13,5 +13,6 @@ public interface L304Mapper {
 
   List<P_getSpectrum> getSpectrum(@Param("mptkey") Integer mptkey, @Param("measdt") String measdt);
   List<P_getSpectrumList> getSpectrumList(@Param("mptkey") Integer mptkey);
+  List<P_getSpectrumList> getSpectrumListDt(@Param("mptkey") Integer mptkey, @Param("dt") String dt);
 
 }

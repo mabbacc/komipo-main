@@ -14,4 +14,8 @@
     SELECT * from public.get_waveform_list(${mptkey})
   </select>
 
+  <select id="getWaveformListDt" resultType="kr.co.atg.apds.komipo_main.entity.pobject.P_getWaveformList">
+    SELECT * from public.get_waveform_list_dt(${mptkey}, #{dt})
+  </select>
+
 </mapper>

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.atg.apds.komipo_main.entity.graph.GraphObject;
-import kr.co.atg.apds.komipo_main.entity.pobject.P_getWaveformList;
+import kr.co.atg.apds.komipo_main.entity.pobject.C_selectDate;
 import kr.co.atg.apds.komipo_main.fend.service.L303Service;
 
 @RestController
@@ -37,10 +37,20 @@ public class L303Controller {
     return l303Service.getWaveform(filter, mptkey, measdt);
   }
 
+  /*
   @GetMapping("/detail-analysis/waveform-dt-list")
   public List<P_getWaveformList> getWaveformList(HttpServletRequest req, HttpServletResponse res,
       @RequestParam("mptkey") Integer mptkey) {
     return l303Service.getWaveformList(mptkey);
+
+  }
+  */
+
+  @GetMapping("/detail-analysis/waveform-dt-list")
+  public C_selectDate getWaveformList(HttpServletRequest req, HttpServletResponse res,
+      @RequestParam("mptkey") Integer mptkey,
+      @RequestParam(name="dt", required=false) String dt) {
+    return l303Service.getWaveformListDt(mptkey, dt);
 
   }
 

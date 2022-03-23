@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.atg.apds.komipo_main.entity.graph.GraphObject;
-import kr.co.atg.apds.komipo_main.entity.pobject.P_getSpectrumList;
+import kr.co.atg.apds.komipo_main.entity.pobject.C_selectDate;
 import kr.co.atg.apds.komipo_main.fend.service.L304Service;
 
 @RestController
@@ -35,11 +35,20 @@ public class L304Controller {
     return l304Service.getSpectrum(mptkey, measdt);
   }
 
+  /*
   @GetMapping("/detail-analysis/spectrum-dt-list")
   public List<P_getSpectrumList> getSpectrumList(HttpServletRequest req, HttpServletResponse res, 
       @RequestParam("mptkey") Integer mptkey) {
 
     return l304Service.getSpectrumList(mptkey);
+  }
+  */
+  @GetMapping("/detail-analysis/spectrum-dt-list")
+  public C_selectDate getSpectrumList(HttpServletRequest req, HttpServletResponse res, 
+      @RequestParam("mptkey") Integer mptkey,
+      @RequestParam(name="dt", required=false) String dt) {
+
+    return l304Service.getSpectrumListDt(mptkey, dt);
   }
 
 }
